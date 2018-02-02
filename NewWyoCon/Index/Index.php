@@ -1,7 +1,10 @@
 
 <!-- PHP class files -->
-<?php require('../control/functions.php');
- require('../control/session.php');
+<?php 
+  require('../control/functions.php');
+  require('../control/session.php');
+  include('../control/Login.Controller.php');  
+  include('../AdminBar/Primary.php');   
 
 ?>
 
@@ -23,6 +26,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   <!-- Angular animate -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+    <!-- For ng sanitize -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
 
   <!-- Linking files -->
     <script src="../script/controller.js"></script>
@@ -30,22 +35,20 @@
 
     <!-- Javascript testing -->
     <script>
-
-        
     </script>
-</head
+</head>
 
 
 
 <body>
     <form id="LoginSystem" method="POST" action="Index.php">
         <label>Username :</label>
-        <input type="text" id="UserName" name="UserName" value="<?php if(isset($_POST['UserName'])){ echo $_POST['UserName'];} ?>">
+        <input type="text" id="UserName" name="UserName" value="<?php  if(isset($_COOKIE['UserName'])){ echo $_COOKIE['UserName'];} elseif(isset($_POST['UserName'])){ echo $_POST['UserName'];} ?>">
         <label>Password</label>
         <input type="password" id="Password" name="Password" value="<?php if(isset($_POST['Password'])){ echo $_POST['Password'];} ?>">
-        <input type="submit" id="LoginUser" name="LoginUser" onClick="<?php LoginUser(); ?>">
+        <input type="submit" id="LoginUser" name="LoginUser"/>
         <a href="Index.php" id="ReturnToIndex">Return to Index</a>
-        <a href="../register/regindex.php">Register</a>
+        <a href="../admin/admin.index.php">Register</a>
         
     </form><!--Login Container -->
 </body>

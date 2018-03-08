@@ -16,6 +16,19 @@
   float: right;
 }
 
+.editLabel {
+  width: 200px;
+  height: 50px;
+  font-size: 160%;
+  margin-left: -5px;
+  padding: 5px;
+  display: inline-block;
+  text-align: center;
+  background-color: black;
+  border-left: 2px solid #ffffff;
+  color: #ffffff;
+}
+
 html {
   margin: 0px;
   padding: 0px;
@@ -154,7 +167,7 @@ body {
   height: 260px;
   display: inline-block;
   float: left;
-  border: 5px solid #313131;
+  border: 2px solid #313131;
   border-radius: 7px;
   margin-left: 10px;
 }
@@ -202,7 +215,117 @@ body {
 }
 
 #RegERROR {
-  color: blue;
+  color: red;
   padding: 10px;
+}
+
+#PermissionInfo {
+  width: 700px;
+  height: auto;
+  display: inline-block;
+  margin-left: 20px;
+  border: 2px solid black;
+}
+
+#PermissionInfo h2 {
+  color: blue;
+  text-align: center;
+}
+
+#PermissionInfo label {
+  font-size: 130%;
+  width: 200px;
+  height: auto;
+  float: left;
+  margin-left: 10px;
+}
+
+#PermissionInfo ul {
+  width: auto;
+  font-size: 100%;
+  border-bottom: 2px solid black;
+  padding: 3px;
+}
+
+#PermissionInfo ul:last-child {
+  border-bottom: none;
+  padding-bttom: none;
+  padding-top: 0px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+#RegRulesContainer {
+  width: 400px;
+  height: 340px;
+  color: red;
+  float: right;
+  padding: 10px;
+  border: 2px solid black;
+  font-size: 100%;
+}
+
+#AdminEditSystem {
+  width: 100%;
+  height: 600px;
+  margin-top: 20px;
+  color: black;
+  background-color: #313131;
+  overflow: scroll;
+}
+
+#AdminEditSystem label {
+  width: 200px;
+  height: 50px;
+  margin: 0px;
+  margin-left: -5px;
+  padding: 5px;
+  background-color: #fdf5e8;
+  color: black;
+  display: inline-block;
+  border: 2.5px solid black;
+}
+
+#AdminEditSystem label:last-of-type {
+  width: auto;
+}
+
+#retData {
+  border-bottom: 10px solid black;
+}
+
+#retData ul {
+  width: 199px;
+  height: 30px;
+  margin: 0px;
+  padding: 5px;
+  margin-left: -5px;
+  display: inline-block;
+  border-left: 5px solid black;
+  background-color: #c0beaf;
+}
+
+#retData ul:last-of-type {
+  width: 160px;
+  background-color: transparent;
+  border: none;
+  margin-left: 5px;
+}
+
+#retData .DeleteAdminBTN {
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  color: blue;
+  border-radius: 5px;
+}
+
+#retData .DeleteAdminBTN:hover {
+  color: red;
+  background-color: black;
+}
+
+#retData .DeleteAdminBTN:active {
+  background-color: white;
 }
 /*# sourceMappingURL=reg.css.map */

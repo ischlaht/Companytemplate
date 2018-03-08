@@ -1,13 +1,30 @@
 <?php
-require("conf.php");
-$con = $GLOBALS['conn'];
+include_once("conf.php");
+$conn = $GLOBALS['DataBaseConnection'];
 $CookieFix = $GLOBALS['Cookie'];
+
+
+        //Database values
+        $DBTableAdmins    = $GLOBALS['DBTableAdminAccounts'];
+        $DBUsername         =   $GLOBALS['databaseUsername'];
+        $DBPassword         =   $GLOBALS['databasePassword'];
+        $DBFirstname        =   $GLOBALS['databaseFirstname'];
+        $DBLastname         =   $GLOBALS['databaseLastname'];
+        $DBCode             =   $GLOBALS['databaseCode'];
+        $DBPower            =   $GLOBALS['databasePower'];
+        $DBAdminer          =   $GLOBALS['databaseAdminer'];
+        $DBServerAdmin      =   $GLOBALS['databaseServerAdmin'];
+        $DBViewAccounts     =   $GLOBALS['databaseViewAccounts'];
+        $DBRegisterNewAdmins=   $GLOBALS['databaseRegisterNewAdmins'];
+        $DBDeleteAccounts   =   $GLOBALS['databaseDeleteAccounts'];
+                  
 
 
 if(isset($_POST['LoginUser'])){
         //DB Connection errors
     if($conn == false){
         echo "<script> console.log('Could not Connect to database'); alert('Could NOT Connect to DataBase')</script>";
+        $Logger->Logg("Failed to connect to database on loggin...");
     }
         //Variables
     $userName = $_POST['UserName'];
@@ -16,8 +33,8 @@ if(isset($_POST['LoginUser'])){
     $userName = strtoupper($userName);
     $password = md5($password);
                 //select for login
-            $Login = "SELECT * FROM adminer WHERE userName = ? && password = ?";
-        if($LoginCheckstmt = $con->prepare($Login)){
+            $Login = "SELECT * FROM $DBTableAdmins WHERE $DBUsername = ? && $DBPassword = ?";
+        if($LoginCheckstmt = $conn->prepare($Login)){
             $LoginCheckstmt->bind_param('ss', $userName, $password);
             $LoginCheckstmt->execute();
             $LoginCheckstmt->store_result();
@@ -46,6 +63,7 @@ if(isset($_POST['LoginUser'])){
                 setcookie('DeleteAccounts',$SdeleteAccounts,   time()+3600*24*60, '/', $CookieFix, false);
                 setcookie('Code',          $Scode,             time()+3600*24*60, '/', $CookieFix, false);
                 $LoginCheckstmt->close();//Close out of database
+                $Logger->Logg("User just Logged in...");
 
                     if(isset($_COOKIE['UserName']) && $_COOKIE['Session'] === 'TRUELY'){
                         // if($_COOKIE['ServerAdmin'] != 'TRUE'){
@@ -62,20 +80,12 @@ if(isset($_POST['LoginUser'])){
                         // $LoginCheckstmt->close();
                         echo "Wrong Username or Password, Please Try Again!";
                         $_SESSION['session'] = "ERROR";   
-                        setcookie('Session', 'ERROR', time()+3600*24*60, '/', $CookieFix, false);           
+                        setcookie('Session', 'ERROR', time()+3600*24*60, '/', $CookieFix, false);   
+                        $Logger->Logg("User entered wrong username/password combination...");
                     }
                 
         }
 }
-
-
-
-// printf("Number of rows: %d.\n", $userCheckstmt->num_rows);
-
-
-
-
-
 
 
 

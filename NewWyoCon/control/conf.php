@@ -1,18 +1,48 @@
 <?php
 
-//DataBase Connection and Configurations
-$conn = mysqli_connect('localhost', 'root', '', 'companytemplate');
+//DataBase Connection
+$DataBaseConnection = mysqli_connect('localhost', 'root', '', 'companytemplate');
+//Database Tables
+$DBTableAdminAccounts           = 'admins';//Table for users(admins)...
+//Database values-------------------------------------------------------
+    $databaseUserID             = 'id';
+    $databaseUsername           = 'userName';
+    $databasePassword           = 'password';
+    $databaseFirstname          = 'firstName';
+    $databaseLastname           = 'lastName';
+    $databaseCode               = 'code';
+    $databasePower              = 'power';
+    $databaseAdminer            = 'adminer';
+    $databaseServerAdmin        = 'serverAdmin';
+    $databaseViewAccounts       = 'viewAccounts';
+    $databaseRegisterNewAdmins  = 'registerNewAdmins';
+    $databaseDeleteAccounts     = 'deleteAccounts';
+    $databaseAccountCreated     = 'accountCreated';
 
 
-//DELETE LATER!~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~~!!!!!!!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~
-if($conn == false){
+
+//Error Handeling
+if($DataBaseConnection == false){
     echo "<script> console.log('Could not Connect to database'); alert('Could NOT Connect to DataBase')</script>";
-}//DELETE LATER!~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~~!!!!!!!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~
+    $Logger->Logg("Failed to connect to database on loggin...");
+}
 
-    //Cookie Configurations
+
+
+    //Cookie Configuration
 $Cookie = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false; 
-// $CookieFix = $GLOBALS['Cookie'];
-// mysqli_select_db($dbconn, 'login_register');
-// if(isset($_COOKIE['UserName'])){
-// }
+
+
+//Logging System
+class Logger{
+    public function Logg($LogThis){
+        date_default_timezone_set("America/Denver");
+        $userName = $_POST['UserName'];
+            $LogFileAppend = fopen("../Logs.txt", "a+");
+                fwrite($LogFileAppend, "--->". $userName. "::: " .$LogThis. " Date: ". date("Y/m/d")." Time: ". date("h:i:sa")."\n");
+                fclose($LogFileAppend);
+    }
+}
+$Logger = new Logger($LogThis);
+
 ?>

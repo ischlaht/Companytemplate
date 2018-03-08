@@ -1,7 +1,7 @@
 
 
-$('#RegisterSystem').hide();    
 $(document).ready( function() {
+    $('#RegisterSystem').hide();    
         $('#RegShowBTN').click( function(){
             $('#RegisterSystem').slideToggle();
         });
@@ -9,7 +9,6 @@ $(document).ready( function() {
       
 
 var RegisterApp = angular.module('RegisterSystem', ['ngSanitize']);
-
 RegisterApp.controller('RegisterUser', ['$scope', '$http', function ($scope, $http) {
     $scope.RegNewAdmin = function(){
         if(confirm("Are You sure you want to register a new admin?")){
@@ -47,9 +46,6 @@ RegisterApp.controller('RegisterUser', ['$scope', '$http', function ($scope, $ht
                     headers: {'Content-Type': undefined},
                 })
                     .then(function(response, data, header, status, config) {
-                        console.log('Agnular Success');
-                        response.data;
-                        $scope.response = response.data;
                         $('#RegERROR').text(response.data);
                         console.log(response.data);
                     });
@@ -66,26 +62,19 @@ RegisterApp.controller('RegisterUser', ['$scope', '$http', function ($scope, $ht
                 headers: {'Content-Type': undefined},
             })
                 .then(function(response, data, header, status, config) {
-                        response.data;
-                        $scope.response = response.data;
-                        console.log(response.data);
+                        // console.log(response.data);
                         $('#UsernameAvailability').text(response.data);
                     var usernamecss = $('#UsernameAvailability').text();        
                         if(usernamecss.length > 15){
                             $('#Username').css("border-color", "red");        
-                                
                         }
                         if(usernamecss.length < 13){
                             $('#Username').css("border-color", "green");        
-                                
                         }
                         if(Username.length == 0){
                             $('#Username').css("border-color", "red");        
-                                
                         }
-                    
                 }); 
-              
     }
     $scope.CheckPassword = function(password){
         var password = document.getElementById('Password').value;
@@ -147,56 +136,102 @@ RegisterApp.controller('RegisterUser', ['$scope', '$http', function ($scope, $ht
             if(lastname.length > 0){
                 $('#Lastname').css("border-color", "green");    
             }
-
     }
-
 }]);
 //Manually Bootstraping REGISTER SYSTEM app^^^^^^^^^^^^^^^^
 $('#RegisterSystem').ready( function() {
 angular.bootstrap($('#RegisterSystem'), ['RegisterSystem']);
 });
-// var RegisterApp = angular.module('RegisterSystem', ['ngSanitize']);
-// RegisterApp.controller('RegisterUser', ['$scope', '$http', function ($scope, $http) {
-//     $scope.RegNewAdmin = function(){
-//         //variables and binds
-//         var FD = new FormData();
-//         var Username = document.getElementById('Username').value;
-//         var Password = document.getElementById('Password').value;
-//         var Password2 = document.getElementById('Password2').value;
-//         var Firstname = document.getElementById('Firstname').value;
-//         var Lastname = document.getElementById('Lastname').value;
-//         // var ERROR = document.getElementById('ERROR').value;
-//         // var ERROR = $('#ERROR').text();
-//         //apending the files to bind them
-//         FD.append('Username', Username);
-//         FD.append('Password', Password);
-//         FD.append('Password2', Password2);
-//         FD.append('Firstname', Firstname);
-//         FD.append('Lastname', Lastname);
-//         // AJAX request
-//         $http({
-//             method: 'POST',
-//             url: '../control/test.php',
-//             data: FD,
-//             headers: {'Content-Type': undefined},
-//         })
-//             .then(function(response, data, header, status, config) {
-//                 response.data;
-//                 $scope.response = response.data;
-//                 console.log(response.data);
-//                 console.log('Jquery Success');
-//                 // $scope.errorA = response.data;
-//                 // document.getElementById("ERROR").textContent = response.data;
-//                 // $('#ERROR').text(response.data);
-//                 alert(response.data);
-//             })
-//     };
-// }]);
 
-// //Manually Bootstraping REGISTER SYSTEM app^^^^^^^^^^^^^^^^
-// $('#RegisterSystem').ready( function() {
-// angular.bootstrap($('#RegisterSystem'), ['RegisterSystem']);
-// });
+
+
+
+var RegisterApp = angular.module('AdminEditSystem', ['ngSanitize', 'ngCookies']);
+RegisterApp.controller('GetAdmins', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
+    $scope.GetAdminNames = function(){
+        var adminerCookie = $cookies.get('Admin');
+        var serverAdminCookie = $cookies.get('ServerAdmin');
+        var viewAccountsCookie = $cookies.get('ViewAccounts');
+        var RegAdminsCookie = $cookies.get('RegAdmins');
+        var deleteAccountsCookie = $cookies.get('DeleteAccounts');
+        var codeCookie = $cookies.get('Code');
+            $scope.isAdmin = serverAdminCookie;
+            $scope.isServerAdmin = serverAdminCookie;
+            $scope.viewwAccounts = viewAccountsCookie;
+                if(serverAdminCookie != 'TRUE'){
+                    $('.serverAdmin').hide();
+                }
+                if(viewAccountsCookie != 'TRUE'){
+                    $('#AdminEditSystem').hide();
+                }
+                    $http({
+                        method: "get",
+                        url: '../control/functions.php?GetAdminNames="true"',
+                    })
+                        .then(function(response, data, config){
+                                for(i in response.data){
+                                    $scope.Records = response.data;
+                                };
+                        });
+    };
+    $scope.ChangeAdmin = function(username, permissionValue, myFunction){
+        // alert(username);
+        var  serverAdminCookie = $cookies.get('ServerAdmin');
+        var FD = new FormData();
+        FD.append('username', username);
+        FD.append('permissionValue', permissionValue);
+        FD.append('myeditFunction', myFunction);        
+        if(serverAdminCookie == 'TRUE'){ 
+            if(confirm('Change the Website Admin permissions for this user?')){
+                    $http({
+                        method: "post",
+                        url: '../control/functions.php?ChangeAdminer="true"',
+                        data: FD,
+                        headers: {'Content-Type': undefined},            
+                    })
+                    .then(function(response, data, config){
+                        console.log(response.data);
+                        $scope.GetAdminNames();
+                    });
+                }
+                else{return;}
+            }
+            else{ alert('You do not have the permssions to change this setting')}
+    };
+
+    $scope.DeleteAdmin = function(username){
+        var FD = new FormData();
+        FD.append('username', username);
+        var deleteAccountsCookie = $cookies.get('DeleteAccounts');
+            if(deleteAccountsCookie == 'TRUE'){
+                if(confirm('Delete '+username+ '\'s account?')){
+                    $http({
+                        method: "post",
+                        url: '../control/functions.php?DeleteAdmin="true"',
+                        data: FD,
+                        headers: {'Content-Type': undefined},            
+                    })
+                    .then(function(response, data, config){
+                        console.log(response.data);
+                        $scope.GetAdminNames();
+                    });
+                }
+                else{return;}
+            }
+            else(alert("You do not have permission to delete accounts."))
+    }
+
+}]);
+
+
+//Bootstraping angular app
+$('#AdminEditSystem').ready( function() {
+angular.bootstrap($('#AdminEditSystem'), ['AdminEditSystem']);
+});
+
+
+
+
 
 // // Reg user Controller
 // $(document).ready( function() {
@@ -206,36 +241,6 @@ angular.bootstrap($('#RegisterSystem'), ['RegisterSystem']);
 // $('document').ready( function() {
 
 // });
-
-// $('document').ready( function() {
-
-// });
-
-
-// $('document').ready( function() {
-
-// });
-
-
-// $('document').ready( function() {
-
-// });
-
-
-// $('document').ready( function() {
-
-// });
-
-
-// $('document').ready( function() {
-
-// });
-
-
-// $('document').ready( function() {
-
-// });
-
 
 // $('document').ready( function() {
 

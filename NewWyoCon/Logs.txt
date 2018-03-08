@@ -1,0 +1,15 @@
+--->ISAAC:::  Date: 2018/02/08 Time: 09:44:50pm
+--->ISAAC:::  Date: 2018/02/08 Time: 09:45:31pm
+--->ISAAC:::  Date: 2018/02/08 Time: 09:45:32pm
+--->ISAAC:::  Date: 2018/02/08 Time: 09:45:42pm
+--->ISAAC::: User Logged in Date: 2018/02/08 Time: 09:46:07pm
+--->ISAAC::: User Logged in Date: 2018/02/08 Time: 09:46:15pm
+--->ISAAC::: User just Logged in! Date: 2018/02/08 Time: 09:47:10pm
+--->isaacs::: User entered wrong username/password combination... Date: 2018/02/08 Time: 09:49:58pm
+--->isaacs::: User entered wrong username/password combination... Date: 2018/02/08 Time: 09:51:53pm
+--->isaac::: User just Logged in... Date: 2018/02/08 Time: 09:51:56pm
+--->isaac::: User just Logged in... Date: 2018/02/08 Time: 09:52:00pm
+--->isaac::: User just Logged in... Date: 2018/02/08 Time: 09:52:27pm
+--->isaac::: User just Logged in... Date: 2018/02/08 Time: 09:52:31pm
+--->isaac::: User just Logged in... Date: 2018/02/21 Time: 04:51:55pm
+--->isaac::: User just Logged in... Date: 2018/02/21 Time: 04:51:56pm

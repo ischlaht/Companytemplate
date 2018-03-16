@@ -5,55 +5,44 @@
 
 // function Logout($LogOut){
     // $LogOut = $_POST['LogOut'];
-    if(isset($_POST['LogOutt'])){
+if(isset($_POST['LogOutt'])){
     $CookieFix = $GLOBALS['Cookie'];
                             //Setting Cookies
-    setcookie('Session',       '', time()-10, '/', $CookieFix, false);
-    setcookie('UserName',      '', time()-10, '/', $CookieFix, false);
-    setcookie('Admin',         '', time()-10, '/', $CookieFix, false);
-    setcookie('ServerAdmin',   '', time()-10, '/', $CookieFix, false);
-    setcookie('ViewAccounts',  '', time()-10, '/', $CookieFix, false);
-    setcookie('RegAdmins',     '', time()-10, '/', $CookieFix, false);
-    setcookie('DeleteAccounts','', time()-10, '/', $CookieFix, false);
-    setcookie('Code',          '', time()-10, '/', $CookieFix, false);
-    echo "logged out";
-    echo "<script>alert('You Have Logged-Out!');</script>";
+    setcookie('Session',       'FALSEY',     time()-10, '/', $CookieFix, false);
+    setcookie('Loggid-in',     'Logged-out', time()-10, '/', $CookieFix, false);    
+    setcookie('UserName',      '',           time()-10, '/', $CookieFix, false);
+    setcookie('Admin',         '',           time()-10, '/', $CookieFix, false);
+    setcookie('ServerAdmin',   '',           time()-10, '/', $CookieFix, false);
+    setcookie('BanAdmins',     '',           time()-10, '/', $CookieFix, false);
+    setcookie('RegAdmins',     '',           time()-10, '/', $CookieFix, false);
+    setcookie('DeleteAccounts','',           time()-10, '/', $CookieFix, false);
+    setcookie('Code',          '',           time()-10, '/', $CookieFix, false);
+        echo "Logged out";
+        echo "<script>alert('You Have Logged-Out!');</script>";
+        header('location: ../Index/index.php');
 }
-// }
 
 if(isset($_COOKIE['Session'])){
-
     if(isset($_COOKIE['UserName']) && $_COOKIE['Session'] === 'TRUELY'){
-        
 ?>
-
-
         <form method='POST' id="AdminBarContainer"> 
             <h4> Welcome <?php echo $_COOKIE['UserName']?></h4>
             <input type='submit' name='LogOutt' value="Logout"/>
         </form>
-
-
-
 <?php //";
-        }
-    
-
-    else{
-        
     }
+    else{}
 }
-
-
-
 ?>
+
+
 <style>
 #AdminBarContainer{
     width: 360px;
     height: 70px;
     position: fixed;
-    right: 10px;
-    top: 5px;
+    right: 150px;
+    top: 20px;
     background-color: darkgrey;
     padding: 10px;
     border-radius: 5px;

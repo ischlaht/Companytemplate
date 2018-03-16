@@ -90,8 +90,8 @@ else{
             <ul><label>Server</label>
                 <input type="checkbox" id="GiveServerCheck" name="GiveServerCheck"/>
             </ul>
-            <ul><label>View User Accounts</label>
-                <input type="checkbox" id="ViewAccountsCheck" name="ViewAccountsCheck"/>
+            <ul><label>Ban Admins</label>
+                <input type="checkbox" id="BanAdminsCheck" name="BanAdminsCheck"/>
             </ul>
             <ul>
             <label>Register Admins</label>
@@ -122,8 +122,7 @@ else{
             <h2>Rules For Registration</h2>
                 <li>All fields are required.</li>
                 <li>Username : must be between 4-20 letters/numbers long, Cannot use special characters.</li>
-        <li>Password : must be atleast 6 characters long.</li>
-        
+                <li>Password : must be atleast 6 characters long.</li>
         </div>
 
 
@@ -133,49 +132,50 @@ else{
     </form><!--registration Container -->
 
     <form method="POST" ng-Controller="GetAdmins" class="ng-cloak" id="AdminEditSystem">
-        <div id="GetAdminNames" ng-init="GetAdminNames()">
             <input style="width: 100%; height: 40px;" type="submit" ng-init="GetAdminNames()" ng-click="GetAdminNames()" value="Refresh"/>
+        <div id="GetAdminNames" ng-init="GetAdminNames()">
                     <label class="editLabel">Firstname : </label>
                     <label class="editLabel">Lastname : </label>
                     <label class="editLabel">UserName : </label>
                     <label class="editLabel">Website Admin :</label>
                     <label class="editLabel">ServerAdmin</label>    
-                    <label class="editLabel">View Accounts</label>  
+                    <label class="editLabel">Ban Admins</label>  
                     <label class="editLabel">Register Admins</label>  
                     <label class="editLabel">Delete Accounts</label>  
-                    <label class="editLabel">Acc. Created</label>                                                                                                                                  
+                    <label class="editLabel">Acc. Created</label>     
                 <div id="retData" ng-repeat="Records in Records track by $index">
                         <ul>{{Records.user.firstname}}</ul>
                         <ul>{{Records.user.lastname}}</ul>
                         <ul>{{Records.user.username}}</ul>
     
-                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.adminer, 'adminer')" ng-if="Records.user.adminer == 'TRUE'" class="serverAdmin ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.adminer, 'adminer')" ng-if="Records.user.adminer == 'TRUE'" class="ChangePermissionsBTN ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
 
-                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.adminer, 'adminer')" class="serverAdmin ng-cloak" ng-if="Records.user.adminer == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.adminer, 'adminer')" class="ChangePermissionsBTN ng-cloak" ng-if="Records.user.adminer == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
             
-                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.serveradmin, 'serveradmin')" ng-if="Records.user.serveradmin == 'TRUE'" class="serverAdmin ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.serveradmin, 'serveradmin')" ng-if="Records.user.serveradmin == 'TRUE'" class="ChangePermissionsBTN ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
 
-                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.serveradmin, 'serveradmin')" class="serverAdmin ng-cloak" ng-if="Records.user.serveradmin == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.serveradmin, 'serveradmin')" class="ChangePermissionsBTN ng-cloak" ng-if="Records.user.serveradmin == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
                        
-                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.viewaccounts, 'viewaccounts')" ng-if="Records.user.viewaccounts == 'TRUE'" class="serverAdmin ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.banadmins, 'banadmins')" ng-if="Records.user.banadmins == 'TRUE'" class="ChangePermissionsBTN ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
 
-                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.viewaccounts, 'viewaccounts')" class="serverAdmin ng-cloak" ng-if="Records.user.viewaccounts == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.banadmins, 'banadmins')" class="ChangePermissionsBTN ng-cloak" ng-if="Records.user.banadmins == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
 
-                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.registeradmins, 'registeradmins')" ng-if="Records.user.registeradmins == 'TRUE'" class="serverAdmin ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.registeradmins, 'registeradmins')" ng-if="Records.user.registeradmins == 'TRUE'" class="ChangePermissionsBTN ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
 
-                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.registeradmins, 'registeradmins')" class="serverAdmin ng-cloak" ng-if="Records.user.registeradmins == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.registeradmins, 'registeradmins')" class="ChangePermissionsBTN ng-cloak" ng-if="Records.user.registeradmins == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
 
-                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.deleteaccounts, 'deleteaccounts')" ng-if="Records.user.deleteaccounts == 'TRUE'" class="serverAdmin ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDTruebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.deleteaccounts, 'deleteaccounts')" ng-if="Records.user.deleteaccounts == 'TRUE'" class="ChangePermissionsBTN ng-cloak" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
 
-                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.deleteaccounts, 'deleteaccounts')" class="serverAdmin ng-cloak" ng-if="Records.user.deleteaccounts == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
+                        <img ng-src="../Images/Buttons/KSDFalsebtn.png" ng-click="ChangeAdmin(Records.user.username, Records.user.deleteaccounts, 'deleteaccounts')" class="ChangePermissionsBTN ng-cloak" ng-if="Records.user.deleteaccounts == 'FALSE'" style="width: 150px; height: 30px; color: green; font-size: 130%; margin-bottom: 0px; padding: 0px; margin-left: 25px; margin-right: 18px;"/>
 
-                        <ul>{{Records.user.accountcreated}}</ul>
+                        <ul style="color: white">{{Records.user.accountcreated}}</ul>
+
+                        <input type="button" ng-if="Records.user.code != 'BAN' && banAdminsCookie == 'TRUE'" class="BanAdminBTN" ng-click="BanAdmin(Records.user.username, Records.user.code)" value="Ban"/>
+
+                         <input type="button" ng-if="Records.user.code == 'BAN' && banAdminsCookie == 'TRUE'" class="BanAdminBTN" ng-click="BanAdmin(Records.user.username, Records.user.code)" value="Un-ban"/>
 
                         <input type="button" class="DeleteAdminBTN" ng-click="DeleteAdmin(Records.user.username)" value="X"/>
 
-                        <input type="button" ng-if="Records.user.code != 'BAN'" class="BanAdminBTN" ng-click="BanAdmin(Records.user.username)" value="Ban"/>
-
-                         <input type="button" ng-if="Records.user.code == 'BAN'" class="BanAdminBTN" ng-click="BanAdmin(Records.user.username)" value="Un-ban"/>
                         
 
            

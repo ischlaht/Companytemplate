@@ -25,6 +25,10 @@ if(isset($_GET['DeleteAdmin'])){
     $AdminInfo->DeleteAdminAccount();
 }
 
+if(isset($_GET['BanAdmin'])){
+    $AdminInfo->BanAdminAccount();
+}
+
 
 
 ?>

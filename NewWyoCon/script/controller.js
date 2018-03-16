@@ -23,7 +23,7 @@ RegisterApp.controller('RegisterUser', ['$scope', '$http', function ($scope, $ht
                 //User Permissions Bariables
             var GiveAdminCheck = document.getElementById('GiveAdminCheck').checked;
             var GiveServerCheck = document.getElementById('GiveServerCheck').checked;
-            var ViewAccountsCheck = document.getElementById('ViewAccountsCheck').checked;
+            var ViewAccountsCheck = document.getElementById('BanAdminsCheck').checked;
             var RegisterAdminsCheck = document.getElementById('RegisterAdminsCheck').checked;
             var DeleteAccountsCheck = document.getElementById('DeleteAccountsCheck').checked;
                 //appending the files to bind them
@@ -35,7 +35,7 @@ RegisterApp.controller('RegisterUser', ['$scope', '$http', function ($scope, $ht
                 //User permission binding and appending
             FD.append('GiveAdminCheck', GiveAdminCheck);
             FD.append('GiveServerCheck', GiveServerCheck);
-            FD.append('ViewAccountsCheck', ViewAccountsCheck);
+            FD.append('BanAdminsCheck', BanAdminsCheck);
             FD.append('RegisterAdminsCheck', RegisterAdminsCheck);
             FD.append('DeleteAccountsCheck', DeleteAccountsCheck);
                 // AJAX request
@@ -48,6 +48,7 @@ RegisterApp.controller('RegisterUser', ['$scope', '$http', function ($scope, $ht
                     .then(function(response, data, header, status, config) {
                         $('#RegERROR').text(response.data);
                         console.log(response.data);
+                        
                     });
         }
     };
@@ -151,24 +152,25 @@ RegisterApp.controller('GetAdmins', ['$scope', '$http', '$cookies', function ($s
     $scope.GetAdminNames = function(){
         var adminerCookie = $cookies.get('Admin');
         var serverAdminCookie = $cookies.get('ServerAdmin');
-        var viewAccountsCookie = $cookies.get('ViewAccounts');
+        var banAdminsCookie = $cookies.get('BanAdmins');
         var RegAdminsCookie = $cookies.get('RegAdmins');
         var deleteAccountsCookie = $cookies.get('DeleteAccounts');
         var codeCookie = $cookies.get('Code');
-            $scope.isAdmin = serverAdminCookie;
-            $scope.isServerAdmin = serverAdminCookie;
-            $scope.viewwAccounts = viewAccountsCookie;
+            $scope.AdminCookie = serverAdminCookie;
+            $scope.serverAdminCookie = serverAdminCookie;
+            $scope.banAdminsCookie = banAdminsCookie;
                 if(serverAdminCookie != 'TRUE'){
-                    $('.serverAdmin').hide();
-                }
-                if(viewAccountsCookie != 'TRUE'){
                     $('#AdminEditSystem').hide();
+                }
+                if(RegAdminsCookie != 'TRUE'){
+                    $('#RegShowBTN').hide();
+                    $('#RegisterSystem').hide();                    
                 }
                     $http({
                         method: "get",
                         url: '../control/functions.php?GetAdminNames="true"',
                     })
-                        .then(function(response, data, config){
+                        .then(function(response, data){
                                 for(i in response.data){
                                     $scope.Records = response.data;
                                 };
@@ -189,10 +191,10 @@ RegisterApp.controller('GetAdmins', ['$scope', '$http', '$cookies', function ($s
                         data: FD,
                         headers: {'Content-Type': undefined},            
                     })
-                    .then(function(response, data, config){
-                        console.log(response.data);
-                        $scope.GetAdminNames();
-                    });
+                        .then(function(response, data){
+                            console.log(response.data);
+                            $scope.GetAdminNames();
+                        });
                 }
                 else{return;}
             }
@@ -211,14 +213,33 @@ RegisterApp.controller('GetAdmins', ['$scope', '$http', '$cookies', function ($s
                         data: FD,
                         headers: {'Content-Type': undefined},            
                     })
-                    .then(function(response, data, config){
-                        console.log(response.data);
-                        $scope.GetAdminNames();
-                    });
+                        .then(function(response, data){
+                            console.log(response.data);
+                            $scope.GetAdminNames();
+                        });
                 }
                 else{return;}
             }
             else(alert("You do not have permission to delete accounts."))
+    }
+
+    $scope.BanAdmin = function(username, usercode){
+        var FD = new FormData();
+        FD.append('username', username);
+        FD.append('usercode', usercode);
+        if(confirm('Would you like to ban/un-ban ' +username+ '?')){
+            $http({
+                    method: "post",
+                    url: '../control/functions.php?BanAdmin="true"',
+                    data: FD,
+                    headers: {'Content-Type': undefined},            
+                })
+                    .then(function(response, data){
+                        console.log(response.data);
+                        $scope.GetAdminNames();
+                    });
+        }
+        else{return;}
     }
 
 }]);

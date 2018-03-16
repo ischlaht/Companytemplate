@@ -1,6 +1,6 @@
 
 <?php
-    include_once("conf.php");
+    require_once("conf.php");
     // $conn = mysqli_connect('localhost', 'root', '', 'companytemplate');
     
 class Register{
@@ -19,7 +19,7 @@ class Register{
         $DBPower            =   $GLOBALS['databasePower'];
         $DBAdminer          =   $GLOBALS['databaseAdminer'];
         $DBServerAdmin      =   $GLOBALS['databaseServerAdmin'];
-        $DBViewAccounts     =   $GLOBALS['databaseViewAccounts'];
+        $DBBanAdmins        =   $GLOBALS['databaseBanAdmins'];
         $DBRegisterNewAdmins=   $GLOBALS['databaseRegisterNewAdmins'];
         $DBDeleteAccounts   =   $GLOBALS['databaseDeleteAccounts'];
                   
@@ -39,7 +39,7 @@ class Register{
             //User Super Permissions
         $powerGiveAdmin     =   $_POST['GiveAdminCheck'];
         $powerServer        =   $_POST['GiveServerCheck'];
-        $powerAccounts      =   $_POST['ViewAccountsCheck'];
+        $powerBanAdmins      =   $_POST['BanAdminsCheck'];
         $powerRegisterAdmins=   $_POST['RegisterAdminsCheck'];
         $powerDeleteAccounts=   $_POST['DeleteAccountsCheck'];
             // error handling
@@ -59,6 +59,7 @@ class Register{
             if (!preg_match('#^[a-zA-Z0-9äöüÄÖÜ]+$#', $userName) && !empty($userName)) {
                     array_push($error, '- Username can only contain letters and numbers ,');
                     echo '- Username can only contain letters and numbers ,';
+                    // $Logger->Logg('User Registration: Tried to use special characters.');
             }
                 //uSERNAME lENGTH CHECKER
             if (strlen($userName) < 4 OR strlen($userName) > 20) {
@@ -68,7 +69,7 @@ class Register{
                 }
             }
                 //___Username Availability
-            $newquery = "SELECT * FROM $DBTableAdmins WHERE  $DBUsername = ? ";
+            $newquery = "SELECT * FROM $DBTableAdmins WHERE $DBUsername = ? ";
             if($userCheckstmt = $conn->prepare($newquery)){
                 $userCheckstmt->bind_param('s', $userName);
                 $userCheckstmt->execute();
@@ -105,13 +106,13 @@ class Register{
                         $powerServer = "FALSE";
                     }
                 }
-                if(!empty($powerAccounts)){
-                    if($powerAccounts === "true"){
-                        $powerAccounts = "TRUE";
+                if(!empty($powerBanAdmins)){
+                    if($powerBanAdmins === "true"){
+                        $powerBanAdmins = "TRUE";
                         echo "-User can view certian account information and logs,\n";                            
                     }
                     else{
-                        $powerAccounts = "FALSE";
+                        $powerBanAdmins = "FALSE";
                     }
                 }
                 if(!empty($powerRegisterAdmins)){
@@ -137,12 +138,12 @@ class Register{
                     $code = 'D';
                     $power = 'D';
                     $sqlRegister = "INSERT INTO $DBTableAdmins($DBUsername, $DBPassword, $DBFirstname, $DBLastname, $DBCode, 
-                                            $DBPower, $DBAdminer, $DBServerAdmin, $DBViewAccounts, $DBRegisterNewAdmins, $DBDeleteAccounts) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                            $DBPower, $DBAdminer, $DBServerAdmin, $DBBanAdmins, $DBRegisterNewAdmins, $DBDeleteAccounts) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 if($stmt = $conn->prepare($sqlRegister)){
                     $stmt->bind_param('sssssssssss', $userName, $password, $firstName, $lastName, $code, 
-                                            $power, $powerGiveAdmin, $powerServer, $powerAccounts, $powerRegisterAdmins, $powerDeleteAccounts);
+                                            $power, $powerGiveAdmin, $powerServer, $powerBanAdmins, $powerRegisterAdmins, $powerDeleteAccounts);
                     $stmt->execute();
-                    echo "User-account ($userName) has been created. Ask a SuperUser to add any other needed permission.";
+                    echo "User-account ($userName) has been created. Ask a SuperUser to add any other needed permission.\n";
                     // if($stmt == false){
                     //     echo "stmt is true";
                     // }
@@ -202,15 +203,15 @@ class AdminInfo{
         $DBPower            =   $GLOBALS['databasePower'];
         $DBAdminer          =   $GLOBALS['databaseAdminer'];
         $DBServerAdmin      =   $GLOBALS['databaseServerAdmin'];
-        $DBViewAccounts     =   $GLOBALS['databaseViewAccounts'];
+        $DBBanAdmins        =   $GLOBALS['databaseBanAdmins'];
         $DBRegisterNewAdmins=   $GLOBALS['databaseRegisterNewAdmins'];
         $DBDeleteAccounts   =   $GLOBALS['databaseDeleteAccounts'];
         $DBAccountCreated   =   $GLOBALS['databaseAccountCreated'];
             //Preparing statement
-                $newquery = "SELECT $DBUserID, $DBUsername, $DBFirstname, $DBLastname, $DBCode, $DBPower, $DBAdminer, $DBServerAdmin, $DBViewAccounts, $DBRegisterNewAdmins, $DBDeleteAccounts, $DBAccountCreated FROM $DBTableAdmins";
+                $newquery = "SELECT $DBUserID, $DBUsername, $DBFirstname, $DBLastname, $DBCode, $DBPower, $DBAdminer, $DBServerAdmin, $DBBanAdmins, $DBRegisterNewAdmins, $DBDeleteAccounts, $DBAccountCreated FROM $DBTableAdmins";
             if($stmt = $conn->prepare($newquery)){
                 $stmt->execute();
-                $stmt->bind_result($id, $username, $firstname, $lastname, $code, $power, $adminer, $serveradmin, $viewaccounts, $registeradmins, $deleteaccounts, $accountcreated);
+                $stmt->bind_result($id, $username, $firstname, $lastname, $code, $power, $adminer, $serveradmin, $banadmins, $registeradmins, $deleteaccounts, $accountcreated);
                 $stmt->store_result();
                     while ($stmt->fetch()) {
                         $data = array( 'user'=> array(
@@ -222,7 +223,7 @@ class AdminInfo{
                             'power'=>$power, 
                             'adminer'=>$adminer, 
                             'serveradmin'=>$serveradmin, 
-                            'viewaccounts'=>$viewaccounts, 
+                            'banadmins'=>$banadmins, 
                             'registeradmins'=>$registeradmins, 
                             'deleteaccounts'=>$deleteaccounts, 
                             'accountcreated'=>$accountcreated));
@@ -238,16 +239,14 @@ class AdminInfo{
         $conn = $GLOBALS['DataBaseConnection'];
         //Database values
       $DBTableAdmins        =   $GLOBALS['DBTableAdminAccounts'];
-        $DBUserID           =   $GLOBALS['databaseUserID'];
         $DBUsername         =   $GLOBALS['databaseUsername'];
-        $DBPassword         =   $GLOBALS['databasePassword'];
         $DBFirstname        =   $GLOBALS['databaseFirstname'];
         $DBLastname         =   $GLOBALS['databaseLastname'];
         $DBCode             =   $GLOBALS['databaseCode'];
         $DBPower            =   $GLOBALS['databasePower'];
         $DBAdminer          =   $GLOBALS['databaseAdminer'];
         $DBServerAdmin      =   $GLOBALS['databaseServerAdmin'];
-        $DBViewAccounts     =   $GLOBALS['databaseViewAccounts'];
+        $DBBanAdmins        =   $GLOBALS['databaseBanAdmins'];
         $DBRegisterNewAdmins=   $GLOBALS['databaseRegisterNewAdmins'];
         $DBDeleteAccounts   =   $GLOBALS['databaseDeleteAccounts'];
         $DBAccountCreated   =   $GLOBALS['databaseAccountCreated'];
@@ -262,35 +261,31 @@ class AdminInfo{
                     if($permissionValue == "FALSE"){
                         $newValue = "TRUE";
                     }
-
-
-                    if($myEditFunction == "adminer"){
-                        $myFunction = $DBAdminer;
-                    }
-                    if($myEditFunction == "serveradmin"){
-                        $myFunction = $DBServerAdmin;
-                    }
-                    if($myEditFunction == "viewaccounts"){
-                        $myFunction = $DBViewAccounts;
-                    }
-                    if($myEditFunction == "registeradmins"){
-                        $myFunction = $DBRegisterNewAdmins;
-                    }
-                    if($myEditFunction == "deleteaccounts"){
-                        $myFunction = $DBDeleteAccounts;
-                    }
-
-                    //Database controls
-                        $newquery = "UPDATE $DBTableAdmins SET $myFunction=? WHERE $DBUsername=?";
-                    if($stmt = $conn->prepare($newquery)){
-                        $stmt->bind_param('ss', $newValue, $username);
-                        $stmt->execute();
-                        // $userCheckstmt->store_result();
-                    }       
-                        //Handle error if statement fails
-                    if($stmt == false){
-                        echo "Failed to make insertion...statement is false -IS";
-                    }
+                        if($myEditFunction == "adminer"){
+                            $myFunction = $DBAdminer;
+                        }
+                        if($myEditFunction == "serveradmin"){
+                            $myFunction = $DBServerAdmin;
+                        }
+                        if($myEditFunction == "banadmins"){
+                            $myFunction = $DBBanAdmins;
+                        }
+                        if($myEditFunction == "registeradmins"){
+                            $myFunction = $DBRegisterNewAdmins;
+                        }
+                        if($myEditFunction == "deleteaccounts"){
+                            $myFunction = $DBDeleteAccounts;
+                        }
+                            //Database controls
+                                $newquery = "UPDATE $DBTableAdmins SET $myFunction=? WHERE $DBUsername=?";
+                            if($stmt = $conn->prepare($newquery)){
+                                $stmt->bind_param('ss', $newValue, $username);
+                                $stmt->execute();
+                            }       
+                                //Handle error if statement fails
+                            if($stmt == false){
+                                echo "Failed to make insertion...statement is false -IS";
+                            }
             }
     }
 
@@ -308,13 +303,13 @@ class AdminInfo{
         $DBPower            =   $GLOBALS['databasePower'];
         $DBAdminer          =   $GLOBALS['databaseAdminer'];
         $DBServerAdmin      =   $GLOBALS['databaseServerAdmin'];
-        $DBViewAccounts     =   $GLOBALS['databaseViewAccounts'];
+        $DBBanAdmins        =   $GLOBALS['databaseBanAdmins'];
         $DBRegisterNewAdmins=   $GLOBALS['databaseRegisterNewAdmins'];
         $DBDeleteAccounts   =   $GLOBALS['databaseDeleteAccounts'];
         $DBAccountCreated   =   $GLOBALS['databaseAccountCreated'];
             $username = $_POST['username'];
                 //Database controls
-                    $newquery = "DELETE FROM $DBTableAdmins WHERE username=?";
+                    $newquery = "DELETE FROM $DBTableAdmins WHERE $DBUsername=?";
                 if($stmt = $conn->prepare($newquery)){
                     $stmt->bind_param('s', $username);
                     $stmt->execute();
@@ -323,8 +318,48 @@ class AdminInfo{
                 if($stmt == false){
                     echo "Failed to make deletion...statement is false -IS";
                 }
-                    
+                else{
+                    echo "Un-coded ERROR -IS";
+                }
+    }
 
+    function BanAdminAccount(){
+        file_get_contents("php://input"); 
+        $conn = $GLOBALS['DataBaseConnection'];
+            //Database values
+      $DBTableAdmins        =   $GLOBALS['DBTableAdminAccounts'];
+        $DBUserID           =   $GLOBALS['databaseUserID'];
+        $DBUsername         =   $GLOBALS['databaseUsername'];
+        $DBPassword         =   $GLOBALS['databasePassword'];
+        $DBFirstname        =   $GLOBALS['databaseFirstname'];
+        $DBLastname         =   $GLOBALS['databaseLastname'];
+        $DBCode             =   $GLOBALS['databaseCode'];
+        $DBPower            =   $GLOBALS['databasePower'];
+        $DBAdminer          =   $GLOBALS['databaseAdminer'];
+        $DBServerAdmin      =   $GLOBALS['databaseServerAdmin'];
+        $DBBanAdmins        =   $GLOBALS['databaseBanAdmins'];
+        $DBAccountCreated   =   $GLOBALS['databaseAccountCreated'];
+            $username = $_POST['username'];
+            $code = $_POST['usercode'];
+                if($code == "BAN"){
+                    $newValue = "D";
+                }
+                if($code != "BAN"){
+                    $newValue = "BAN";
+                }
+                    // Database controls
+                        $newQuery = "UPDATE $DBTableAdmins SET $DBCode=? WHERE $DBUsername=?";
+                    if($stmt = $conn->prepare($newQuery)){
+                        $stmt->bind_param('ss', $newValue, $username);
+                        $stmt->execute();
+                    }       
+                        //Handle error if statement fails
+                    elseif($stmt == false){
+                        echo "Failed to ban/un-ban user...statement is false -IS";
+                    }
+                    else{
+                        echo "Un-coded ERROR -IS";
+                    }
     }
 }
 
@@ -355,5 +390,28 @@ $AdminInfo = new AdminInfo();
         'registeradmins'=>$registeradmins, 
         'deleteaccounts'=>$deleteaccounts, 
         'accountcreated'=>$accountcreated));
+
+
+
+
+
+
+                file_get_contents("php://input"); 
+        $conn = $GLOBALS['DataBaseConnection'];
+            //Database values
+      $DBTableAdmins        =   $GLOBALS['DBTableAdminAccounts'];
+        $DBUserID           =   $GLOBALS['databaseUserID'];
+        $DBUsername         =   $GLOBALS['databaseUsername'];
+        $DBPassword         =   $GLOBALS['databasePassword'];
+        $DBFirstname        =   $GLOBALS['databaseFirstname'];
+        $DBLastname         =   $GLOBALS['databaseLastname'];
+        $DBCode             =   $GLOBALS['databaseCode'];
+        $DBPower            =   $GLOBALS['databasePower'];
+        $DBAdminer          =   $GLOBALS['databaseAdminer'];
+        $DBServerAdmin      =   $GLOBALS['databaseServerAdmin'];
+        $DBBanAdmins        =   $GLOBALS['databaseBanAdmins'];
+        $DBRegisterNewAdmins=   $GLOBALS['databaseRegisterNewAdmins'];
+        $DBDeleteAccounts   =   $GLOBALS['databaseDeleteAccounts'];
+        $DBAccountCreated   =   $GLOBALS['databaseAccountCreated'];
 */
 ?>

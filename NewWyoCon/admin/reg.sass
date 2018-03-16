@@ -1,4 +1,4 @@
-//------------------- ===== colors ===== --------------------------------------------------------------------------------------------
+/* ------------------- ===== colors ===== -------------------------------------------------------------------------------------------- */
 
 $lightred: #ff4040
 $red: #ff0909
@@ -102,7 +102,9 @@ $fontultra: 200%
 
 
 //  ---------------------- ===== Pre-Classes ===== ----------------------------------------------------------------------------------------------
-
+.ng-cloak
+    /* display: none !important;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */
+  
 .hider
     display: none
 
@@ -163,6 +165,7 @@ body
     position: absolute
     right: 50px
     top: 10px
+    font-weight: bold
 .HeadingBTN
     +boxSize($width: 30px, $height: 100px)
     display: inline-table        
@@ -171,7 +174,7 @@ body
     font-size: $font    
     border-radius: 10px
     &:hover
-        color: $green
+        color: $black
         background-color: $white
     &:active
         color: $blue
@@ -192,7 +195,9 @@ body
     margin-left: 20px
     border-radius: 10px
     color: $red
-    
+    &:hover
+        color: $white
+        background-color: $black
 
 #RegisterSystem
     +boxSize($width: 100%, $height: auto)
@@ -206,7 +211,7 @@ body
 
     
 #RegInfoContainer
-    display: inline-block
+    display: block
     +boxSize($width: 390px, $height: auto)
     float: left
     padding: 5px
@@ -226,7 +231,7 @@ body
             float: left
             margin: 0px
             padding: 0px
-            display: inline-block            
+            display: block            
         input[type="text"], input[type="password"]
             float: right
             width: 200px
@@ -241,7 +246,7 @@ body
 
 #RegPermissionsContainer
     +boxSize($width: auto, $height: 260px)   
-    display: inline-block
+    display: block
     float: left
     border: 2px solid $darkgrey
     border-radius: 7px
@@ -255,7 +260,7 @@ body
         padding-bottom: 30px
         text-align: center
         border-bottom: 2px solid $lightgrey
-        
+         
     ul
         +boxSize($width: 240px, $height: 25px)      
         border-radius: 20%
@@ -308,7 +313,7 @@ body
         padding: 3px
         &:last-child
             border-bottom: none
-            padding-bttom: none
+            padding-bottom: none
             padding-top: 0px
             margin-bottom: 0px
             margin-top: 0px
@@ -368,17 +373,42 @@ body
             background-color: transparent
             border: none
             margin-left: 5px
+    img
+        padding: 0px
+        pargin: 0px
+        &:hover
+            border: 3px solid white
+            border-radius: 50px
+            cursor: pointer
+        &:active
+            border: 3px solid $red
     .DeleteAdminBTN
         +boxSize($width: 30px, $height: 30px)  
-        background-color: red
-        color: blue
+        font-size: $font        
         border-radius: 5px
-
+        margin-left: 5px
+        background-color: $red
+        color: black
         &:hover
             color: red
             background-color: black
+            cursor: pointer
         &:active
             background-color: white
+    .BanAdminBTN 
+        +boxSize($width: 65px, $height: 30px)  
+        font-size: $font
+        border-radius: 5px
+        margin-left: 5px
+        background-color: $red
+        color: black
+        &:hover
+            color: red
+            background-color: black
+            cursor: pointer
+        &:active
+            background-color: white
+    
 
         
         
